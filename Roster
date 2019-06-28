@@ -1,0 +1,40 @@
+import time
+roster = []
+
+MISSING = object()    # powerful python by Aaron Maxwell, don't know how to use yet.
+val = mydict.get(key, MISSING)
+if val is MISSING:
+    
+
+class Roster:
+    def __init__(self, lastname):
+        self.__name = self
+        self.lastname = lastname
+
+    def lastname():
+        global count
+        if count == 0:
+            count = int(input('How many names would you like to add? \n'))
+            try:
+                val = int(count)
+            except ValueError:
+                print('Please use a whole, positive number.')
+                Roster.lastname()
+        elif count > 0:
+                prompt = input('Provide a name: \n')
+                if input not in roster:
+                    roster.append(input)
+                    count = count - 1
+                    print('Copy')
+                    time.sleep(1)
+                    Roster.lastname()
+                elif prompt in roster: 
+                    print('That name is already included.')
+                    Roster.lastname()
+        next = input('Do you have others to add at this time (y/n)?')
+        if next == ('y'):
+            Roster.lastname()
+        elif next == ('n'):
+            print(roster)
+            print('Thank you')
+    print('.....')

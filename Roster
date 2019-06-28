@@ -20,14 +20,16 @@ class Roster:
             except ValueError:
                 print('Please use a whole, positive number.')
                 Roster.lastname()
-        elif count > 0:
+       elif count > 0:
                 prompt = input('Provide a name: \n')
                 if input not in roster:
                     roster.append(input)
                     count = count - 1
                     print('Copy')
-                    time.sleep(1)
-                    Roster.lastname()
+                    for count = 0:    # fix needed
+                        continue
+                    else:
+                        Roster.lastname()
                 elif prompt in roster: 
                     print('That name is already included.')
                     Roster.lastname()

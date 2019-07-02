@@ -1,0 +1,16 @@
+letters = ['a','b','c','d','e','f','g','h','i','j',]
+numbers = []
+x = 0
+for a in letters:
+  x = x + 1
+  numbers.append(x)
+  alphanumero = zip(numbers, letters)
+  count = len(letters)
+  while (count != 0):
+      for i in alphanumero:
+         print(i, sep= '\n')
+         count = count - 1
+         next
+print("That's all folks!")
+
+### There is an error during runtime, in the while loop.

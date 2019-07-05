@@ -1,0 +1,33 @@
+class Employee:
+
+    def __init__(self, name):
+        self.name = name
+        self.roster = []
+
+    def add_person(self, person):
+        self.roster.append(person)
+    
+    def person():
+        name = input('say something')
+
+    @classmethod
+    def getinstances(cls):
+        Area = set()
+        for ref in cls.person:
+            obj = ref()
+            if obj is not None:
+                yield obj
+            else:
+                Area.add(ref)
+        cls.person -= name
+
+Mobile = Employee('Mobile')
+HVAC = Employee('HVAC')
+Mobile.add_person('Matt')
+Mobile.add_person('John')
+Mobile.roster
+HVAC.roster
+
+
+for obj in cls.getinstances():
+    print(obj.name)

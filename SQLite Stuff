@@ -1,0 +1,407 @@
+# The following is a bunch of copy/pasting from
+# Sebastian Raschka - ' https://github.com/rasbt '
+# The majority of this is from 2014 (if it matters).
+
+import sqlite3
+
+sqlite_file = 'my_first_db.sqlite'    # name of the sqlite database file
+table_name1 = 'my_table_1'	# name of the table to be created
+table_name2 = 'my_table_2'	# name of the table to be created
+table_name = 'my_table_3'
+new_field = 'my_1st_column' # name of the column
+field_type = 'INTEGER'  # column data type
+id_column = 'my_1st_column' # name of the PRIMARY KEY column
+new_column = 'unique_names'  # name of the new column
+new_column1 = 'my_2nd_column'  # name of the new column
+new_column2 = 'my_3rd_column' # name of the new column
+column_type = 'TEXT' # E.g., INTEGER, TEXT, NULL, REAL, BLOB
+index_name = 'my_unique_index' # name for the new unique index
+default_val = 'Hello World' # a default value for the new column rows
+id_field = 'id' # name of the ID column
+date_col = 'date' # name of the date column
+time_col = 'time'# name of the time column
+date_time_col = 'date_time' # name of the date & time column
+field_type = 'TEXT' # column data type
+some_id = 123456
+value_1 = 'hello world'
+value_2 = 12345
+
+#$# Connecting to the database file
+conn = sqlite3.connect(sqlite_file)
+c = conn.cursor()
+
+# Creating a new SQLite table with 1 column
+c.execute('CREATE TABLE {tn} ({nf} {ft})'\
+        .format(tn=table_name1, nf=new_field, ft=field_type))
+
+# Creating a second table with 1 column and set it as PRIMARY KEY
+# note that PRIMARY KEY column must consist of unique values!
+c.execute('CREATE TABLE {tn} ({nf} {ft} PRIMARY KEY)'\
+        .format(tn=table_name2, nf=new_field, ft=field_type))
+
+## Creating an index on a column with unique! values
+## Boosts performance for data base operations.
+
+## Adding a new column and update some record
+c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ct}"\
+        .format(tn=table_name, cn=new_column, ct=column_type))
+
+c.execute("UPDATE {tn} SET {cn}='sebastian_r' WHERE {idf}=123456".\
+        format(tn=table_name, idf=id_column, cn=new_column))
+
+## Creating an unique index
+c.execute('CREATE INDEX {ix} on {tn}({cn})'\
+        .format(ix=index_name, tn=table_name, cn=new_column))
+
+## Dropping the unique index
+## E.g., to avoid future conflicts with update/insert functions
+c.execute('DROP INDEX {ix}'.format(ix=index_name))
+
+### A) Adding a new column without a row value
+c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ct}"\
+        .format(tn=table_name, cn=new_column1, ct=column_type))
+
+### B) Adding a new column with a default row value
+c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ct} DEFAULT '{df}'"\
+.format(tn=table_name, cn=new_column2, ct=column_type, df=default_val))
+
+## ##
+## ## 1) Adding a new column to save date insert a row with the current date 
+## ## in the following format: YYYY-MM-DD
+## ## e.g., 2014-03-06
+c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}'"\
+         .format(tn=table_name, cn=date_col))
+## ## insert a new row with the current date and time, e.g., 2014-03-06
+c.execute("INSERT INTO {tn} ({idf}, {cn}) VALUES('some_id1', DATE('now'))"\
+         .format(tn=table_name, idf=id_field, cn=date_col))
+
+
+## ## 2) Adding a new column to save date and time and update with the current time
+## ## in the following format: HH:MM:SS
+## ## e.g., 16:26:37
+c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}'"\
+         .format(tn=table_name, cn=time_col))
+## ## update row for the new current date and time column, e.g., 2014-03-06 16:26:37
+c.execute("UPDATE {tn} SET {cn}=TIME('now') WHERE {idf}='some_id1'"\
+         .format(tn=table_name, idf=id_field, cn=time_col))
+
+## ## 3) Adding a new column to save date and time and update with current date-time
+## ## in the following format: YYYY-MM-DD HH:MM:SS
+## ## e.g., 2014-03-06 16:26:37
+c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}'"\
+         .format(tn=table_name, cn=date_time_col))
+## ## update row for the new current date and time column, e.g., 2014-03-06 16:26:37
+c.execute("UPDATE {tn} SET {cn}=(CURRENT_TIMESTAMP) WHERE {idf}='some_id1'"\
+         .format(tn=table_name, idf=id_field, cn=date_time_col))
+
+## ## Database should now look like this:
+## ## id         date           time        date_time
+## ## "some_id1" "2014-03-06"   "16:42:30"  "2014-03-06 16:42:30"
+
+## ## 4) Retrieve all IDs of entries between 2 date_times
+c.execute("SELECT {idf} FROM {tn} WHERE {cn} BETWEEN '2013-03-06 10:10:10' AND '2015-03-06 10:10:10'".\
+    format(idf=id_field, tn=table_name, cn=date_time_col))
+all_date_times = c.fetchall()
+print('4) all entries between ~2013 - 2015:', all_date_times)
+
+## ## 5) Retrieve all IDs of entries between that are older than 1 day and 12 hrs
+c.execute("SELECT {idf} FROM {tn} WHERE DATE('now') - {dc} >= 1 AND DATE('now') - {tc} >= 12".\
+    format(idf=id_field, tn=table_name, dc=date_col, tc=time_col))
+all_1day12hrs_entries = c.fetchall()
+print('5) entries older than 1 day:', all_1day12hrs_entries)
+
+# ### Getting column names of an SQLite database table
+# ### Retrieve column information
+# ### Every column will be represented by a tuple with the following attributes:
+# ### (id, name, type, notnull, default_value, primary_key)
+c.execute('PRAGMA TABLE_INFO({})'.format(table_name))
+
+# ### collect names in a list
+names = [tup[1] for tup in c.fetchall()]
+print(names)
+# ### e.g., ['id', 'date', 'time', 'date_time']
+
+### ## Selecting rows from an existing SQLite database
+### ## 1) Contents of all columns for row that match a certain value in 1 column
+c.execute('SELECT * FROM {tn} WHERE {cn}="Hi World"'.\
+        format(tn=table_name, cn=column_2))
+all_rows = c.fetchall()
+print('1):', all_rows)
+
+### ## 2) Value of a particular column for rows that match a certain value in column_1 
+c.execute('SELECT ({coi}) FROM {tn} WHERE {cn}="Hi World"'.\
+        format(coi=column_2, tn=table_name, cn=column_2))
+all_rows = c.fetchall()
+print('2):', all_rows)
+
+### ## 3) Value of 2 particular columns for rows that match a certain value in 1 column
+c.execute('SELECT {coi1},{coi2} FROM {tn} WHERE {coi1}="Hi World"'.\
+        format(coi1=column_2, coi2=column_3, tn=table_name, cn=column_2))
+all_rows = c.fetchall()
+print('3):', all_rows)
+
+### ## 4) Selecting only up to 10 rows that match a certain value in 1 column
+c.execute('SELECT * FROM {tn} WHERE {cn}="Hi World" LIMIT 10'.\
+        format(tn=table_name, cn=column_2))
+ten_rows = c.fetchall()
+print('4):', ten_rows)
+
+### ## 5) Check if a certain ID exists and print its column contents
+c.execute("SELECT * FROM {tn} WHERE {idf}=?".\
+        format(tn=table_name, cn=column_2, idf=id_column), (123456,))
+id_exists = c.fetchone()
+if id_exists:
+    print('5): {}'.format(id_exists))
+else:
+    print('5): {} does not exist'.format(some_id))
+
+## ## ## Update records or insert them if they don't exist.
+## ## ## Note that this is a workaround to accomodate for missing
+## ## ## SQL features in SQLite.
+
+## ## ## A) Inserts an ID with a specific value in a second column 
+try:
+    c.execute("INSERT INTO {tn} ({idf}, {cn}) VALUES (123456, 'test')".\
+        format(tn=table_name, idf=id_column, cn=column_name))
+except sqlite3.IntegrityError:
+    print('ERROR: ID already exists in PRIMARY KEY column {}'.format(id_column))
+
+## ## ## B) Tries to insert an ID (if it does not exist yet)
+## ## ## with a specific value in a second column 
+c.execute("INSERT OR IGNORE INTO {tn} ({idf}, {cn}) VALUES (123456, 'test')".\
+        format(tn=table_name, idf=id_column, cn=column_name))
+
+## ## ## C) Updates the newly inserted or pre-existing entry            
+c.execute("UPDATE {tn} SET {cn}=('Hi World') WHERE {idf}=(123456)".\
+format(tn=table_name, cn=column_name, idf=id_column))
+
+
+## # ## A.1) Updating all rows for a single column
+
+c.execute('UPDATE {dn} SET {cn1}={v1}'.\
+        format(dn=table_name, cn1=column_name_1, v1=value1)
+
+
+## # ## A.2) Updating all rows for 2 columns (same for multiple columns)
+
+c.execute('UPDATE {dn} SET {cn1}={v1}, {cn2}={v2}'.\
+        format(dn=table_name, cn1=column_name_1, cn2=column_name_2,
+               v1=value1, v2=value2)
+
+
+
+
+## # ## B.1) Updating specific rows that meet a certain criterion
+## # ## here: update column_1 with value_1 if row has value_2 in column_2
+
+c.execute('UPDATE {dn} SET {cn1}={v1} WHERE {cn2}={v2}'.\
+        format(dn=table_name, cn1=column_name_1, v1=value1)
+
+
+## # ## B.2) Updating specific rows that meet multiple criteria
+## # ## here: update column_1 with value_1 
+## # ##    if row has value_2 in column_2
+## # ##    and if row has value = 1 in column_3
+
+c.execute('UPDATE {dn} SET {cn1}={v1} WHERE {cn2}={v2} AND {cn3}=1'.\
+format(dn=table_name, cn1=column_name_1, v1=value1, cn3=column_name_3)
+
+#$# Committing changes if made
+conn.commit()
+
+#$# Closing the connection to the database file
+conn.close()
+
+#######################################################
+# Sebastian Raschka 2014
+# Prints Information of a SQLite database.
+
+# E.g.,
+#
+"""
+Total rows: 1
+Column Info:
+ID, Name, Type, NotNull, DefaultVal, PrimaryKey
+(0, 'id', 'TEXT', 0, None, 1)
+(1, 'date', '', 0, None, 0)
+(2, 'time', '', 0, None, 0)
+(3, 'date_time', '', 0, None, 0)
+Number of entries per column:
+date: 1
+date_time: 1
+id: 1
+time: 1
+"""
+
+import sqlite3
+
+
+def connect(sqlite_file):
+    """ Make connection to an SQLite database file """
+    conn = sqlite3.connect(sqlite_file)
+    c = conn.cursor()
+    return conn, c
+
+
+def close(conn):
+    """ Commit changes and close connection to the database """
+    # conn.commit()
+    conn.close()
+
+
+def total_rows(cursor, table_name, print_out=False):
+    """ Returns the total number of rows in the database """
+    cursor.execute('SELECT COUNT(*) FROM {}'.format(table_name))
+    count = cursor.fetchall()
+    if print_out:
+        print('\nTotal rows: {}'.format(count[0][0]))
+    return count[0][0]
+
+
+def table_col_info(cursor, table_name, print_out=False):
+    """ Returns a list of tuples with column informations:
+    (id, name, type, notnull, default_value, primary_key)
+    """
+    cursor.execute('PRAGMA TABLE_INFO({})'.format(table_name))
+    info = cursor.fetchall()
+
+    if print_out:
+        print("\nColumn Info:\nID, Name, Type, NotNull, DefaultVal, PrimaryKey")
+        for col in info:
+            print(col)
+    return info
+
+
+def values_in_col(cursor, table_name, print_out=True):
+    """ Returns a dictionary with columns as keys
+    and the number of not-null entries as associated values.
+    """
+    cursor.execute('PRAGMA TABLE_INFO({})'.format(table_name))
+    info = cursor.fetchall()
+    col_dict = dict()
+    for col in info:
+        col_dict[col[1]] = 0
+    for col in col_dict:
+        c.execute('SELECT ({0}) FROM {1} '
+                  'WHERE {0} IS NOT NULL'.format(col, table_name))
+        # In my case this approach resulted in a
+        # better performance than using COUNT
+        number_rows = len(c.fetchall())
+        col_dict[col] = number_rows
+    if print_out:
+        print("\nNumber of entries per column:")
+        for i in col_dict.items():
+            print('{}: {}'.format(i[0], i[1]))
+    return col_dict
+
+
+if __name__ == '__main__':
+
+    sqlite_file = 'my_first_db.sqlite'
+    table_name = 'my_table_3'
+
+    conn, c = connect(sqlite_file)
+    total_rows(c, table_name, print_out=True)
+    table_col_info(c, table_name, print_out=True)
+    # next line might be slow on large databases
+    values_in_col(c, table_name, print_out=True)
+
+close(conn)
+
+########################################################3
+import sqlite3
+
+def create_col_index(db_name, table_name, column_name, index_name):
+    '''
+    Creates a column index on a SQLite table.
+    
+    Keyword arguments:
+        db_name (str): Path of the .sqlite database file.
+        table_name (str): Name of the target table in the SQLite file.
+        condition (str): Condition for querying the SQLite database table.
+        column_name (str): Name of the column for which the index is created.
+    '''
+
+    # Connecting to the database file
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+
+    # Creating the index
+    c.execute('CREATE INDEX {} ON {} ({})'.format(index_name, table_name, column_name))
+
+    # Save index and close the connection to the database
+    conn.commit()
+    conn.close()
+
+
+
+def drop_col_index(db_name, index_name):
+    '''
+    Drops a column index from a SQLite table.
+    
+    Keyword arguments:
+        db_name (str): Path of the .sqlite database file.
+        table_name (str): Name of the target table in the SQLite file.
+        condition (str): Condition for querying the SQLite database table.
+        column_name (str): Name of the column for which the index is dropped.
+    '''
+
+    # Connecting to the database file
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+
+    # Drops the index
+    c.execute('DROP INDEX {}'.format(index_name))
+
+    # Save index and close the connection to the database
+    conn.commit()
+    conn.close()
+
+
+
+def write_from_query(db_name, table_name, condition, content_column, out_file, fetchmany=False):
+    '''
+    Writes contents from a SQLite database column to an output file
+    
+    Keyword arguments:
+        db_name (str): Path of the .sqlite database file.
+        table_name (str): Name of the target table in the SQLite file.
+        condition (str): Condition for querying the SQLite database table.
+        content_column (str): Name of the column that contains the content for the output file.
+        out_file (str): Path of the output file that will be written.
+    '''
+    # Connecting to the database file
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+
+    # Querying the database and writing the output file
+
+
+    # A) using .fetchmany(); recommended for larger databases
+    if fetchmany:
+        c.execute('SELECT ({}) FROM {} WHERE {}'.format(content_column, table_name, condition))
+        with open(out_file, 'w') as outf:
+            results = c.fetchmany(fetchmany)
+            while results:
+                for row in results:
+                    outf.write(row[0])
+                results = c.fetchmany(fetchmany)
+
+    # B) simple .execute() loop
+    else:
+        c.execute('SELECT ({}) FROM {} WHERE {}'.format(content_column, table_name, condition))
+        with open(out_file, 'w') as outf:
+            for row in c:
+                outf.write(row[0])
+
+    # Closing the connection to the database
+    conn.close()
+
+if __name__ == '__main__':
+    write_from_query(
+        db_name='my_db.sqlite',
+        table_name='my_table',
+        condition='variable1=1 AND variable2<=5 AND variable3="Zinc_Plus"',
+        content_column='variable4',
+        out_file='sqlite_out.txt'
+)

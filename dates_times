@@ -2,7 +2,9 @@ from datetime import *
 from time import *
 from time import ctime, strftime, struct_time, strptime, localtime
 
-
+# Use timedelta to calculate birthdays, future anniversaries, time until, since, etc...
+# isoweek to start on sunday ?
+date.timetuple() # Try this
 time_tuple = datetime.now()
 timestamp = ctime()
 tm_breakdown = time.localtime(time.time())

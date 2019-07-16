@@ -1,0 +1,20 @@
+from datetime import *
+from time import *
+from time import ctime, strftime, struct_time, strptime, localtime
+
+
+time_tuple = datetime.now()
+timestamp = ctime()
+tm_breakdown = time.localtime(time.time())
+whole_seconds = time.mktime(tm_breakdown)
+all_seconds = time.time()
+mil_time = time_tuple.strftime("%H%M")
+civ_time = time_tuple.strftime("%I:%M %p")
+date_trio = time_tuple.strftime("%H %B, %Y")
+
+julian_day = 
+
+time_styles = [time_tuple, timestamp, tm_breakdown, whole_seconds, all_seconds, mil_time, civ_time, date_trio
+
+
+time.strptime("input date", "designate format")

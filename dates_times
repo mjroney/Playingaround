@@ -1,22 +1,77 @@
+## Eventually this will become a function, for now just a bunch of notes.
+
+
 from datetime import *
-from time import *
-from time import ctime, strftime, struct_time, strptime, localtime
+    from time import *
+    from time import ctime, strftime, struct_time, strptime, localtime
 
 # Use timedelta to calculate birthdays, future anniversaries, time until, since, etc...
 # isoweek to start on sunday ?
 date.timetuple() # Try this
-time_tuple = datetime.now()
+
+
+tt = datetime.now()
+    # datetime.datetime(2019, 7, 17, 8, 42, 32, 846493)
+
 timestamp = ctime()
-tm_breakdown = time.localtime(time.time())
-whole_seconds = time.mktime(tm_breakdown)
-all_seconds = time.time()
-mil_time = time_tuple.strftime("%H%M")
-civ_time = time_tuple.strftime("%I:%M %p")
-date_trio = time_tuple.strftime("%H %B, %Y")
+    # 'Wed Jul 17 08:42:55 2019'
 
-julian_day = 
+tm_breakdown = localtime(time())
+    # time.struct_time(tm_year=2019, tm_mon=7, tm_mday=17, tm_hour=8, tm_min=46, tm_sec=49, tm_wday=2, tm_yday=198, tm_isdst=1)
 
-time_styles = [time_tuple, timestamp, tm_breakdown, whole_seconds, all_seconds, mil_time, civ_time, date_trio
+whole_seconds = mktime(tm_breakdown)
+    # 1563367609.0
 
+trunc_seconds = int(all_seconds)
+    # 1563367609
+
+all_seconds = time()
+    # 1563367667.6504936
+
+mil_time = tt.strftime("%H%M")
+    # '0842'
+
+civ_time = tt.strftime("%I:%M %p")
+    # '08:42 AM'
+
+date_trio = tt.strftime("%H %B, %Y")
+    # '08 July, 2019'
+
+today = date.today()
+    # datetime.date(2019, 7, 17)
+datetime.date(tt)
+    # datetime.date(2019, 7, 17)
+
+def block_stamp():
+    print(date_trio, '\n', civ_time, '\nJulian:', julian)
+    # 08 July, 2019 
+    # 08:42 AM
+
+today_day = tt.strftime('%A')
+    # 'Wednesday'
+
+julian = tt.strftime('%j')
+    # '198'
+
+int(julian)
+    # 198
+
+week_num = tt.strftime('%U')
+    # '28'
+
+my_birthday = '1981-12-19'
+
+def julian_other():
+    date_to_convert = input('Please enter the desired date in YYYY-MM-DD format. \n')
+    print(datetime.strptime(date_to_convert, '%Y-%m-%d').timetuple().tm_yday)
+
+
+# Please enter the desired date in YYYY-MM-DD format.
+# 1981-12-19
+# 353
+
+
+datetime.datetime.strptime('16234', '%y%j').date()
+datetime.date(2016, 8, 21)
 
 time.strptime("input date", "designate format")

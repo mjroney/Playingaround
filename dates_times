@@ -4,10 +4,11 @@
 def calculate_age():
     from datetime import date, timedelta
     year = int(input('Enter your birth year as YYYY... \n'))
-    month = int(input('...month as MM... \n'))
-    day = int(input('...and day as DD... \n'))
+    month = int(input('    month as MM... \n'))
+    day = int(input('    and day as DD... \n'))
     born = date(year, month, day)
     today = date.today()
+    print(' \nYou are:')
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
     
 def me_time():

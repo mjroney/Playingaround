@@ -1,0 +1,75 @@
+
+>>> import html
+>>> import pip
+from urllib import error, parse, request, response, robotparser
+>>> from urllib.request import urlopen
+>>> urllib.urlopen("http://www.python.org/")
+>>> from urllib2 import urlopen
+>>> urlopen("http://www.python.org/")
+<http.client.HTTPResponse object at 0x02487DD0>
+$ pip install bs4
+$ pip install Requests
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+import requests
+url = 'http://www.cmohs.org/recipient-archive.php'
+response = requests.get(url)
+html = response.content
+print(html)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>> import requests
+>>> response = requests.get(url)
+>>> from bs4 import BeautifulSoup
+url = 'http://www.cmohs.org/recipient-archive.php'
+response = requests.get(url)
+html = response.content
+
+soup = BeautifulSoup(html)
+print soup.prettify()
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+import requests
+from BeautifulSoup import BeautifulSoup
+
+url = 'http://www.cmohs.org/recipient-archive.php'
+response = requests.get(url)
+html = response.content
+
+soup = BeautifulSoup(html)
+table = soup.find('tbody', attrs={'class': 'stripe'})
+print table.prettify()
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+import requests
+from BeautifulSoup import BeautifulSoup
+
+url = 'http://www.cmohs.org/recipient-archive.php?p=141..'
+response = requests.get(url)
+html = response.content
+
+soup = BeautifulSoup(html)
+table = soup.find('div', attrs={'class': 'post-bar'})
+
+for row in table.findAll('tr'):
+    for cell in row.findAll('td'):
+        print cell.text
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+import requests
+from BeautifulSoup import BeautifulSoup
+
+url = 'http://www.showmeboone.com/sheriff/JailResidents/JailResidents.asp'
+response = requests.get(url)
+html = response.content
+
+soup = BeautifulSoup(html)
+table = soup.find('tbody', attrs={'class': 'stripe'})
+
+for row in table.findAll('tr'):
+    for cell in row.findAll('td'):
+        print cell.text.replace('&nbsp;', '')
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

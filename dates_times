@@ -1,3 +1,66 @@
+from datetime import date, time, datetime
+from time import ctime, localtime, mktime, strptime, gmtime
+
+today = datetime.today()
+datetime.datetime(2019, 8, 14, 11, 13, 34, 288481)
+
+now = datetime.now()
+datetime.datetime(2019, 8, 14, 11, 12, 26, 896352)
+
+time()
+datetime.time(0, 0)
+
+localtime()
+time.struct_time(tm_year=2019, tm_mon=8, tm_mday=14, tm_hour=11, tm_min=13, tm_sec=51, tm_wday=2, tm_yday=226, tm_isdst=1)
+gmtime()
+time.struct_time(tm_year=2019, tm_mon=8, tm_mday=14, tm_hour=15, tm_min=43, tm_sec=5, tm_wday=2, tm_yday=226, tm_isdst=0)
+
+mktime(localtime())
+1565795794.0
+
+ctime()
+'Wed Aug 14 11:13:56 2019'
+
+>>> date.timetuple(birthday)
+time.struct_time(tm_year=1981, tm_mon=12, tm_mday=19, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=5, tm_yday=353, tm_isdst=-1)
+
+>>> mktime(date.timetuple(birthday))
+377586000.0
+
+>>> birthday = date(1981, 12, 19)
+>>> birthday
+datetime.date(1981, 12, 19)
+
+>>> date.toordinal(birthday)
+723533
+>>> date.toordinal(today)
+737285
+>>> date.toordinal(today) - date.toordinal(birthday)
+13752
+
+>>> date.fromordinal(13752)
+datetime.date(38, 8, 26)
+
+def datetimer(func):
+    def function_wrapper(X):
+        print('Enter your ', X, 'in \n YYYY, MM, DD format.')
+        func(X)
+        date_entry = input(': ')
+        year, month, day = map(int, date_entry.split(', '))
+        return date(year, month, day)
+    return function_wrapper
+
+@datetimer
+def date_name(X):
+    pass
+
+>>> birthday = date_name('birthday')
+Enter your  birthday in 
+ YYYY, MM, DD format.
+: 1981, 12, 19
+>>> birthday
+datetime.date(1981, 12, 19)
+
 # Various time variables and calculators to help with future work.
 # calculate_age currently requires input. Once it is is being used it will need to parse a date object on its own (from db)
 

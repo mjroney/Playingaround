@@ -61,6 +61,26 @@ Enter your  birthday in
 >>> birthday
 datetime.date(1981, 12, 19)
 
+>>> def age(func):
+	def function_wrapper(Y):
+		birthday = date_name('birthday')
+		today = datetime.today()
+		date.toordinal(birthday)
+		Y = date.toordinal(today) - date.toordinal(birthday)
+		return date.fromordinal(Y)
+	return function_wrapper
+
+>>> @age
+def years_old(Y):
+	pass
+
+>>> matt = years_old('matt')
+Enter your  birthday in 
+ YYYY, MM, DD format.
+: 1981, 12, 19
+>>> matt
+datetime.date(38, 8, 27)  # Years are off by 1 year (too much)
+
 # Various time variables and calculators to help with future work.
 # calculate_age currently requires input. Once it is is being used it will need to parse a date object on its own (from db)
 

@@ -1,5 +1,41 @@
-from datetime import date, time, datetime
-from time import ctime, localtime, mktime, strptime, gmtime
+>>> from datetime import date, time, datetime
+>>> from time import ctime, localtime, mktime, strptime, gmtime
+>>> def datetimer(func):
+    def function_wrapper(X):
+        print('Enter your ', X, 'in \n YYYY, MM, DD format.')
+        func(X)
+        date_entry = input(': ')
+        year, month, day = map(int, date_entry.split(', '))
+        return date(year, month, day)
+    return function_wrapper
+
+>>> @datetimer
+def date_name(X):
+    pass
+
+>>> def time_since(func):
+	def function_wrapper(Y):
+		birthday = date_name('birthday')
+		today = datetime.today()
+		return today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+	return function_wrapper
+
+>>> @time_since
+@datetimer
+def age(Y):
+    pass
+
+>>> matt = age('matt')
+Enter your  birthday in 
+ YYYY, MM, DD format.
+: 1981, 12, 19
+>>> matt
+37
+>>> age('other_matt')
+Enter your  birthday in 
+ YYYY, MM, DD format.
+: 1981, 12, 19
+37
 
 today = datetime.today()
 datetime.datetime(2019, 8, 14, 11, 13, 34, 288481)

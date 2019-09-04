@@ -1,3 +1,48 @@
+from datetime import date, time, datetime, timedelta
+from time import ctime, strftime, struct_time, strptime, localtime, mktime, time
+
+class tm_func:
+
+    def __init__(self, datetimer, date_name, time_since):
+
+        self.datetimer = datetimer
+        self.date_name = date_name
+        self.time_since = time_since
+
+    def datetimer(func):
+        # Decorator - Turns user input into datetime.date object.
+        def function_wrapper(X):
+            print('Enter the ', X, 'in \n YYYY, MM, DD format.')
+            func(X)
+            date_entry = input(': ')
+            year, month, day = map(int, date_entry.split(', '))
+            return date(year, month, day)
+        return function_wrapper
+
+    def ordinal(func):
+        # Decorator - Converts between ordinal and datetime objects.
+        def function_wrapper(X):
+            if int(X) == int:
+                return date.fromordinal(X)
+            elif int(X) != int:
+                return date.toordinal(X)
+        return function_wrapper
+
+    def time_since(*X):
+        today = datetime.today()
+        X = date_name(X)
+        diff = (date.toordinal(today) - 365) - date.toordinal(X)
+        since = date.timetuple(date.fromordinal(diff))
+        return "You are {} years and {} months old.".format(since.tm_year, since.tm_mon)
+
+    @datetimer
+    def date_name(*X):
+        # Used to create the datetime object for initial input into db.
+        pass
+	
+>>> "You are {} years and {} months old.".format(since.tm_year, since.tm_mon)
+'You are 37 years and 9 months old.'
+
 >>> from datetime import date, time, datetime
 >>> from time import ctime, localtime, mktime, strptime, gmtime
 >>> def datetimer(func):

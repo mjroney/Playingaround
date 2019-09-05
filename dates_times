@@ -1,3 +1,45 @@
+    vacation_days = {
+        timedelta(days = 365.25): 0,
+        timedelta(days = 365.25 * 2): 5,
+        timedelta(days = 365.25 * 8): 10,
+        timedelta(days = 365.25 * 15): 15,
+        timedelta(days = 365.25 * 24): 20,
+        }
+
+    def days_at_new_year():
+        service_length = benefit_date - datetime.date(2020, 01, 01)
+
+    def days_end_of_year():
+        service_length = benefit_date - datetime.date(2020, 12, 31)
+
+def vacation_days():
+    amount_of_vdays = {
+    today: date.today(),
+    first_yr: today.replace(today.year - 1),
+    five_days: today.replace(today.year - 2),
+    ten_days: today.replace(today.year - 8),
+    fifteen_days: today.replace(today.year - 15),
+    twenty_days: today.replace(today.year - 24),
+     }
+
+def when_more():
+    benefit_date = date_name('benefit date')
+    
+
+class vacation():
+
+    holidays(2020) = {
+    'New Years Day' : datetime.date(2020, 1, 01),
+    'Martin Luther King Day' : datetime.date(2020, 1, 20),
+    'Good Friday' : datetime.date(2020, 4, 10),
+    'Memorial Day' : datetime.date(2020, 5, 25),
+    'Independance Day' : datetime.date(2020, 7, 04),
+    'Labor Day' : datetime.date(2020, 9, 07),
+    'Thanksgiving Day' : datetime.date(2020, 11, 26),
+    'Black Friday' : datetime.date(2020, 11, 27),
+    'Christmas Eve Day' : datetime.date(2020, 12, 24),
+    'Christmas Day' : datetime.date(2020, 12, 25),
+    }
 from datetime import date, time, datetime, timedelta
 from time import ctime, strftime, struct_time, strptime, localtime, mktime, time
 

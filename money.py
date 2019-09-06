@@ -1,52 +1,63 @@
+https://thispointer.com/python-how-to-find-keys-by-value-in-dictionary/
+
 class money:
-    def __init__(self, find_fridays, bill_sort):
-        self.find_fridays = find_fridays()
+    import datetime as dt
+    from datetime import date, time, datetime
+    global dt, last_friday, this_friday, next_friday, bills
+
+    def __init__(self, bill_sort):
         self.bill_sort = bill_sort()
 
-    def find_fridays():
-        from datetime import date, time, datetime
-        global last_friday, this_friday, next_friday
-        today = date.today()
-        last_friday = today
-        this_friday = today
-        next_friday = today
-        if this_friday.strftime('%a') == 'Fri':
-            last_friday = today.replace(days=(today.days - 7)
-            next_friday = today.replace(days=(today.days + 7)
-            print(last_friday.strftime("%U"), this_friday.strftime("%U"), next_friday.strftime("%U"))
-        elif this_friday.strftime('%a') != 'Fri':
-            this_friday += datetime.timedelta(1)
-            last_friday = this_friday.replace(days=(this_friday.days - 7)
-            next_friday = this_friday.replace(days=(this_friday.days + 7)
-            return last_friday.strftime("%U"), this_friday.strftime("%U"), next_friday.strftime("%U")
-
     def bill_sort():
+        bills = dict()
         from datetime import date, time, datetime
-        today = date.today()
-        money.find_fridays()
-        week_num = today.strftime("%U")
+        this_friday = datetime.now()
+
+        if this_friday.strftime('%a') == 'Fri':
+            last_friday = this_friday - dt.timedelta(days=7)
+            next_friday = this_friday + dt.timedelta(days=7)
+            two_weeks_ago = this_friday - dt.timedelta(days=14)
+
+        else:
+            while this_friday.strftime('%a') != 'Fri':
+                this_friday += dt.timedelta(days=1)
+            last_friday = this_friday - dt.timedelta(days=7)
+            next_friday = this_friday + dt.timedelta(days=7)
+            two_weeks_ago = this_friday - dt.timedelta(days=14)
+
         bills = {
-        power: 8,
-        water: 3,
-        car: 15,
-        home: 1,
-        ccard_1: 18,
-        ccard_2: 24,
-        phone: 12,
-        gas: 5,
-        insurance: 1,
+        'power': 8,
+        'water': 3,
+        'car': 15,
+        'home': 1,
+        'ccard_1': 18,
+        'ccard_2': 24,
+        'phone': 12,
+        'gas': 5,
+        'insurance': 1,
         }
-        for day in bills.values():
-            if day < (this_friday.day):
-                if (this_friday.strftime("%U"))%2 is 0:
-                    print('The following bills should have been paid {}: \n'.format((this_friday.timedelta(-14), bills.keys())))
-                elif (this_friday.strftime("%U"))%2 is 1:
-                    print('The following bills should have been paid {}: \n'.format((this_friday.timedelta(-7), bills.keys())))
-            if day >= (this_friday.day):
-                if (this_friday.strftime("%U"))%2 is 0:
-                    print('The following bills should be paid this friday ({}): \n'.format((this_friday, bills.keys())))
-                elif (this_friday.strftime("%U"))%2 is 1:
-                    if day < (next_friday.day):
-                        print('The following bills should have been paid {}: \n'.format((this_friday.timedelta(-7), bills.keys())))
-                    elif day >= (next_friday.day):
-                        print('The following bills should be paid {}: \n'.format(next_friday, bills.keys()))
+
+        if (this_friday.day)%2 is 0:
+            for value in bills.values():
+            # 0 means even week, pay day week, this only works for biweeky pay. swap the 1 and 0 if yours is opposite
+                if value < (this_friday.day):
+                    print('\nThe following bills should have been paid {}:'.format((two_weeks_ago.strftime("%d %B, %Y"))))
+                    for value in bills.values():
+                        if value < (this_friday.day):
+                        print(bills.keys())
+                elif value < (next_friday.day):
+                    print('\nThe following bills should have been paid {}:'.format((last_friday.strftime("%d %B, %Y"))))
+                    print(bills.keys())
+                elif value >= (this_friday.day):
+                    print('\nThe following bills should be paid this friday ({}):'.format((this_friday.strftime("%d %B, %Y"))))
+                    print(bills.keys())
+
+        elif (this_friday.day)%2 is 1:
+            for value in bills.values():
+                if value < (next_friday.day):
+                    print('\nThe following bills should have been paid {}:'.format((last_friday.strftime("%d %B, %Y"))))
+                    print(bills.keys())
+                elif value >= (next_friday.day):
+                    print('\nThe following bills should be paid {}:'.format(next_friday.strftime("%d %B, %Y")))
+                    print(bills.keys())
+

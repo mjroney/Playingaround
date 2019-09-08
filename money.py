@@ -2,12 +2,24 @@ class money:
     import datetime as dt
     from datetime import date, time, datetime
     global dt, last_friday, this_friday, next_friday, bills
+    
+    bills = dict()
+    bills = {
+        'power': 8,
+        'water': 3,
+        'car': 15,
+        'home': 1,
+        'ccard_1': 18,
+        'ccard_2': 24,
+        'phone': 12,
+        'gas': 5,
+        'insurance': 1,
+        }
 
     def __init__(self, bill_sort):
         self.bill_sort = bill_sort()
 
     def bill_sort():
-        bills = dict()
         from datetime import date, time, datetime
         this_friday = datetime.now()
 
@@ -23,20 +35,7 @@ class money:
             last_friday = this_friday - dt.timedelta(days=7)
             next_friday = this_friday + dt.timedelta(days=7)
             two_weeks_ago = this_friday - dt.timedelta(days=14)
-
-        bills = {
-        'power': 8,
-        'water': 3,
-        'car': 15,
-        'home': 1,
-        'ccard_1': 18,
-        'ccard_2': 24,
-        'phone': 12,
-        'gas': 5,
-        'insurance': 1,
-        }
-
-   
+ 
         div_week = (this_friday.day)%2
     
         if div_week is 1:

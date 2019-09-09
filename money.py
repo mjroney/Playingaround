@@ -36,7 +36,8 @@ class money:
             next_friday = this_friday + dt.timedelta(days=7)
             two_weeks_ago = this_friday - dt.timedelta(days=14)
  
-        div_week = (this_friday.day)%2
+        week_num = this_friday.strftime("%W")
+        div_week = int(week_num)%2
     
         if div_week is 1:
             print('\nThe following bills should have been paid {}:'.format((last_friday.strftime("%d %B, %Y"))))

@@ -1,3 +1,4 @@
+### this was done for a friend, just playing around ###
 class money:
     import datetime as dt
     from datetime import date, time, datetime
